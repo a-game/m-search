@@ -1,19 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import type { Movie } from '$lib/types';
 import { PUBLIC_USE_OPEN_SEARCH } from '$env/static/public';
 
 const url = 'https://api.movies.dcts.se/rpc/movies_search';
-
-type Movie = {
-	id: string;
-	title: string;
-	overview: string;
-	poster: string;
-	runtime: number;
-	popularity: number;
-	genres: string[];
-	released: string;
-};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toMovie = (m: any): Movie => ({

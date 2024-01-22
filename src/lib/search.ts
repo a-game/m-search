@@ -33,3 +33,12 @@ export async function search(query: string, { size = 5, highlight = false }: Opt
 	return result.body.hits;
 }
 
+export async function get(id: string) {
+	const client = new Client({
+		node: PUBLIC_OPEN_SEARCH_URL
+	});
+
+	const { body } = await client.get({ index, id });
+
+	return body._source;
+}
