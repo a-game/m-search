@@ -67,7 +67,7 @@ async function setup() {
 	console.log('indexing data...');
 	const br = await client.helpers.bulk({
 		datasource: data,
-		onDocument: () => ({ index: { _index: index } })
+		onDocument: (doc) => ({ index: { _index: index, _id: doc.id } })
 	});
 
 	console.log('Indexing status: ', br);
