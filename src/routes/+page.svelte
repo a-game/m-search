@@ -5,13 +5,23 @@
 	import { debounce } from '$lib/debounce';
 	import { cn } from '$lib/utils';
 	import { Search, X, Loader2 } from 'lucide-svelte';
+	import { PUBLIC_USE_OPEN_SEARCH } from '$env/static/public';
+
+	type Hit = {
+		id: string;
+		title: string;
+		overview: string;
+	};
 
 	let query = '';
-	let result: string[] = [];
+	let result: (string | Hit)[] = [];
 	let loading = false;
 
+	$: url =
+		PUBLIC_USE_OPEN_SEARCH === 'true'
+			? '/api'
+			: 'https://api.movies.dcts.se/rpc/movies_autocomplete';
 	const limit = 5;
-	const url = `https://api.movies.dcts.se/rpc/movies_autocomplete`;
 	const debouncedFetch = debounce((q: string) =>
 		fetch(`${url}?limit=${limit}&q=${q}`).then((res) => res.json())
 	);
@@ -66,10 +76,25 @@
 
 		{#if result.length > 0}
 			<Card>
-				<CardContent>
-					<ul class="divide-y">
-						{#each result as title}
-							<li class="px-2 py-4 first:pt-0 last:pb-0">{title}</li>
+				<CardContent class="p-0">
+					<ul class="result divide-y">
+						{#each result as hit}
+							<li
+								class={cn(
+									'p-4',
+									typeof hit === 'object' &&
+										'cursor-pointer hover:bg-accent hover:text-accent-foreground'
+								)}
+							>
+								{#if typeof hit === 'string'}
+									{hit}
+								{:else}
+									<a href={`/${hit.id}`}>
+										<p>{@html hit.title}</p>
+										<p class="line-clamp-3 text-sm text-muted-foreground">{@html hit.overview}</p>
+									</a>
+								{/if}
+							</li>
 						{/each}
 					</ul>
 				</CardContent>
