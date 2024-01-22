@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
-	import Empty from '$lib/components/ui/empty.svelte';
+	import Empty from '$lib/components/empty.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { ArrowLeft } from 'lucide-svelte';
 
