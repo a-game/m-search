@@ -3,13 +3,24 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import type { Movie } from '$lib/types';
 	import { Timer } from 'lucide-svelte';
+	import { page } from '$app/stores';
 
 	export let movie: Movie;
+	$: showLink = $page.url.pathname !== `/${movie.id}`;
 </script>
 
 <Card.Root class="flex flex-col">
 	<Card.Header>
-		<Card.Title tag="h3">{movie.title}</Card.Title>
+		<Card.Title tag="h3">
+			{#if showLink}
+				<a
+					class="underline-offset-4 hover:text-accent-foreground hover:underline"
+					href={`/${movie.id}`}>{movie.title}</a
+				>
+			{:else}
+				{movie.title}
+			{/if}
+		</Card.Title>
 		<Card.Description class="flex justify-between">
 			<ul class="flex gap-2">
 				{#each movie.genres as genre}
