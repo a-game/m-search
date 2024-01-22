@@ -1,22 +1,27 @@
 <script lang="ts">
-	import * as Card from '$lib/components/ui/card';
-	import { Badge } from '$lib/components/ui/badge';
-	import Empty from '$lib/components/ui/empty.svelte';
+	import Empty from '$lib/components/empty.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { ArrowLeft } from 'lucide-svelte';
 
 	export let data;
-	let { results } = data;
-	$: ({ results } = data);
+	let { results, total } = data;
+	$: ({ results, total } = data);
 </script>
 
 <main class="container h-full grow pt-8">
-	<header class="mb-8 flex items-center gap-2">
+	<header class="mb-8 flex items-center justify-between">
+		<span class="flex items-center gap-2">
 		<Button variant="ghost" size="icon" href="/">
 			<ArrowLeft class="size-5" />
 			<span class="sr-only">Back</span>
 		</Button>
 		<h2 class="text-2xl font-bold">Search Results</h2>
+		</span>
+		<span class="text-sm text-muted-foreground">
+			{#if !Number.isNaN(total)}
+				Showing {results.length} of {total} results
+			{/if}
+		</span>
 	</header>
 	{#if results.length === 0}
 		<Empty class="col-span-2 text-muted-foreground" title="No results found" />
