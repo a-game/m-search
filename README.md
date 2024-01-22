@@ -4,7 +4,8 @@ m-search is a simple web site that allows you to search for your favorite movies
 
 ## Tech stack
 
-- Sveltekit for bundling, routing, SSR and api.
+- Sveltekit for routing, SSR and api.
+- vite for bundling.
 - shadcn-svelte for ui components (everything in `$lib/components/ui`).
 - Tailwindcss for styling.
 
@@ -12,7 +13,7 @@ m-search is a simple web site that allows you to search for your favorite movies
 
 All you need to do is `npm install` and `npm start` and you are good to go.
 
-The movie api has some minor limitations:
+The provided movie api has some minor limitations:
 
 - It only returns movie titles on autocomplete
 - It doesn't tell you the total number of hits.
