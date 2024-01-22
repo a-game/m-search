@@ -20,9 +20,25 @@ The movie api has some minor limitations:
 
 ## Running against a local OpenSearch (Elasticsearch)
 
+We can resolve the above limitations by running our own search engine. I chose to use OpenSearch (Elasticsearch) because it's open source and it's easy to setup using docker.
+
+In order to run against a local OpenSearch instance, you need to do the following:
+
+1. Run the OpenSearch instance using docker `docker compose up -d`
+2. Index some movies using `node setup.cjs`
+3. Create a `.env` file in the root of the project with the following variable:
+
+```.env
+PUBLIC_USE_LOCAL_API=true
+PUBLIC_OPEN_SEARCH_URL=http://localhost:9200
+```
+
+4. Run `npm start`
+
 ## Cuts
 
 As always in software development, there are some cuts that had to be made:
 
 - No support for pagination.
 - No UI tests using cypress or playwright or the like.
+- Local search engine is limited to 25k documents.
