@@ -39,8 +39,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@opensearch-project/opensearch": "^2.5.0",
 		"bits-ui": "^0.15.1",
 		"clsx": "^2.1.0",
+		"dotenv": "^16.3.2",
 		"lucide-svelte": "^0.312.0",
 		"mode-watcher": "^0.1.2",
 		"tailwind-merge": "^2.2.0",
