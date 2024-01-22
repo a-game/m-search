@@ -17,6 +17,7 @@ The movie api has some minor limitations:
 - It only returns movie titles on autocomplete
 - It doesn't tell you the total number of hits.
 - It's missing highlights on the search results.
+- The `autocomplete` endpoint and the `search` endpoints don't rank the results the same way. (e.g. Search for "foo")
 
 ## Running against a local OpenSearch (Elasticsearch)
 
