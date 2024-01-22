@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { Movie } from '$lib/types';
-import { PUBLIC_USE_OPEN_SEARCH } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
 const url = 'https://api.movies.dcts.se/rpc/movies_search';
 
@@ -21,7 +21,9 @@ const doSearch = async (
 ): Promise<{ results: Movie[]; total: number }> => {
 	const size = 20;
 
-	if (PUBLIC_USE_OPEN_SEARCH === 'true') {
+	console.log(env.PUBLIC_OPEN_SEARCH_URL);
+
+	if (env.PUBLIC_OPEN_SEARCH_URL) {
 		const { search } = await import('$lib/search');
 		const { total, hits } = await search(query, { size });
 

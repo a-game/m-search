@@ -4,9 +4,9 @@ import { load } from './+page.server';
 import * as s from '$lib/search';
 
 describe('Results page', () => {
-	vi.mock('$env/static/public', () => {
+	vi.mock('$env/dynamic/public', () => {
 		return {
-			PUBLIC_USE_OPEN_SEARCH: 'true'
+			env: { PUBLIC_OPEN_SEARCH_URL: 'localhost' }
 		};
 	});
 	it('Should throw if no query is provided', async () => {
@@ -32,30 +32,32 @@ describe('Results page', () => {
 			fetch: vi.fn()
 		} as any;
 
-		const mkSearch = vi.spyOn(s, 'search').mockResolvedValueOnce({ total: { value: 10 }, hits: [] });
+		const mkSearch = vi
+			.spyOn(s, 'search')
+			.mockResolvedValueOnce({ total: { value: 10 }, hits: [] });
 
 		// when
 		const res = await load(evt);
 
 		// then
 		expect(mkSearch).toHaveBeenCalledWith(query, { size: 20 });
-    expect(res).toEqual({ results: [], total: 10 });
+		expect(res).toEqual({ results: [], total: 10 });
 	});
 
-  it('should return empty results if the search fails', async () => {
-    // given
-    const query = 'test';
-    const evt = {
-      url: { searchParams: { get: () => query } },
-      fetch: vi.fn()
-    } as any;
+	it('should return empty results if the search fails', async () => {
+		// given
+		const query = 'test';
+		const evt = {
+			url: { searchParams: { get: () => query } },
+			fetch: vi.fn()
+		} as any;
 
-    vi.spyOn(s, 'search').mockRejectedValueOnce(new Error('test error'));
+		vi.spyOn(s, 'search').mockRejectedValueOnce(new Error('test error'));
 
-    // when
-    const res = await load(evt);
+		// when
+		const res = await load(evt);
 
-    // then
-    expect(res).toEqual({ results: [], total: Number.NaN });
-  });
+		// then
+		expect(res).toEqual({ results: [], total: Number.NaN });
+	});
 });

@@ -23,6 +23,10 @@ The movie api has some minor limitations:
 
 We can resolve the above limitations by running our own search engine. I chose to use OpenSearch (Elasticsearch) because it's open source and it's easy to setup using docker.
 
+### Note
+
+If you want to see how the code looks before adding OpenSearch, you can see it [here](https://github.com/a-game/m-search/tree/87ebd15dd596b9733f27a586bc2017dcbae43fee)
+
 In order to run against a local OpenSearch instance, you need to do the following:
 
 1. Run the OpenSearch instance using docker `docker compose up -d`
@@ -30,7 +34,6 @@ In order to run against a local OpenSearch instance, you need to do the followin
 3. Create a `.env` file in the root of the project with the following variable:
 
 ```.env
-PUBLIC_USE_LOCAL_API=true
 PUBLIC_OPEN_SEARCH_URL=http://localhost:9200
 ```
 

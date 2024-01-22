@@ -2,20 +2,18 @@
 const { Client } = require('@opensearch-project/opensearch');
 require('dotenv').config();
 
-const data = [];
-for (let i = 0; i < 25; i++) {
-	data.push(...require(`./data/m${i}.json`));
-}
-
-console.log('data: ', data.length);
-
 async function setup() {
+	const node = process.env.PUBLIC_OPEN_SEARCH_URL;
+	if (!node) {
+		console.error('PUBLIC_OPEN_SEARCH_URL is not defined in .env. Please define it and try again.');
+		return;
+	}
+
 	const index = 'movies';
-	const client = new Client({
-		node: 'http://localhost:9200'
-	});
+	const client = new Client({ node });
+
 	console.log('Creating index...');
-	const ir = await client.indices.create({
+	const { statusCode } = await client.indices.create({
 		index,
 		body: {
 			settings: {
@@ -62,15 +60,21 @@ async function setup() {
 			}
 		}
 	});
-	console.log('Create index status: ', ir.statusCode);
+	console.log('Create index status: ', statusCode);
 
-	console.log('indexing data...');
-	const br = await client.helpers.bulk({
+	console.log('Reading data files...');
+	const data = [];
+	for (let i = 0; i < 25; i++) {
+		data.push(...require(`./data/m${i}.json`));
+	}
+
+	console.log(`Indexing ${data.length} documents...`);
+	const result = await client.helpers.bulk({
 		datasource: data,
 		onDocument: (doc) => ({ index: { _index: index, _id: doc.id } })
 	});
 
-	console.log('Indexing status: ', br);
+	console.log('Indexing status: ', result);
 }
 
 setup();

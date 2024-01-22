@@ -5,7 +5,7 @@
 	import { debounce } from '$lib/debounce';
 	import { cn } from '$lib/utils';
 	import { Search, X, Loader2 } from 'lucide-svelte';
-	import { PUBLIC_USE_OPEN_SEARCH } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 
 	type Hit = {
 		id: string;
@@ -17,10 +17,9 @@
 	let result: (string | Hit)[] = [];
 	let loading = false;
 
-	$: url =
-		PUBLIC_USE_OPEN_SEARCH === 'true'
-			? '/api'
-			: 'https://api.movies.dcts.se/rpc/movies_autocomplete';
+	$: url = env.PUBLIC_OPEN_SEARCH_URL
+		? '/api'
+		: 'https://api.movies.dcts.se/rpc/movies_autocomplete';
 	const limit = 5;
 	const debouncedFetch = debounce((q: string) =>
 		fetch(`${url}?limit=${limit}&q=${q}`).then((res) => res.json())

@@ -1,15 +1,23 @@
 import { Client } from '@opensearch-project/opensearch';
-import { PUBLIC_OPEN_SEARCH_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 const index = 'movies';
 
 type Options = {
 	size?: number;
 	highlight?: boolean;
 };
+
+function getNode() {
+	const node = env.PUBLIC_OPEN_SEARCH_URL;
+	if (!node) {
+		throw new Error('PUBLIC_OPEN_SEARCH_URL is not defined in .env');
+	}
+	return node;
+}
+
 export async function search(query: string, { size = 5, highlight = false }: Options = {}) {
-	const client = new Client({
-		node: PUBLIC_OPEN_SEARCH_URL
-	});
+	const node = getNode();
+	const client = new Client({ node });
 
 	const body: Record<string, unknown> = {
 		query: {
@@ -34,9 +42,8 @@ export async function search(query: string, { size = 5, highlight = false }: Opt
 }
 
 export async function get(id: string) {
-	const client = new Client({
-		node: PUBLIC_OPEN_SEARCH_URL
-	});
+	const node = getNode();
+	const client = new Client({ node });
 
 	const { body } = await client.get({ index, id });
 
